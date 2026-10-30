@@ -31,7 +31,12 @@
  */
 (function () {
   'use strict';
-  if (window.__pixelThemes) return;
+  // A clear line in the console, so a run from DevTools shows it worked.
+  const say = (text) => console.info('%c' + text, 'color:#2f8a58;font-weight:bold');
+  if (window.__pixelThemes) {
+    say('Pixel Themes đang chạy rồi. Bấm Alt+T (hoặc nút ô vuông màu ở cạnh phải) để chọn theme.');
+    return;
+  }
 
   /* ------------------------------------------------------------------ utils */
 
@@ -1707,6 +1712,7 @@ html[data-pxt-on] canvas[data-pxt-ui="bg"] { display: block !important; }
     sheet(PAGE_CSS, document);
     buildUI();
     applyTheme(cfg.theme);
+    say('✅ Pixel Themes đã chạy. Bấm Alt+T (hoặc nút ô vuông màu ở cạnh phải) để chọn theme.');
   }
 
   boot();
