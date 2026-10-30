@@ -1,7 +1,12 @@
 {
   "name": "pixel-themes",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Pixel/ASCII wallpapers for Claude Code: animated scene above the prompt, a side pane, themed message colors. Run /pixel.",
-  "author": { "name": "Aqua2409z" },
+  "author": {
+    "name": "Aqua2409z"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Aqua2409z/About-Me-/tree/main/chat-themes",
+  "repository": "https://github.com/Aqua2409z/About-Me-",
   "types": "./types/index.d.ts"
 }

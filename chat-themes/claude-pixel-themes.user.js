@@ -2,10 +2,13 @@
 // @name         Pixel Chat Themes
 // @name:vi      Pixel Chat Themes – hình nền pixel cho claude.ai
 // @namespace    https://github.com/Aqua2409z/About-Me-
-// @version      1.0.0
+// @version      1.1.0
 // @description  Animated pixel/ASCII wallpapers behind the claude.ai chat. Type /theme to pick one.
 // @description:vi Hình nền pixel/ASCII chuyển động phía sau khung chat claude.ai. Gõ /theme để chọn.
 // @author       Aqua2409z
+// @license      MIT
+// @homepageURL  https://github.com/Aqua2409z/About-Me-/tree/main/chat-themes
+// @supportURL   https://github.com/Aqua2409z/About-Me-/issues
 // @match        https://claude.ai/*
 // @grant        none
 // @run-at       document-idle

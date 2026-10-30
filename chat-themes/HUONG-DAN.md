@@ -9,13 +9,14 @@ Ký hiệu phím: `Ctrl + Alt + I` nghĩa là giữ **Ctrl** và **Alt** rồi b
 ## Mục lục
 
 1. [Chọn cách phù hợp](#1-chọn-cách-phù-hợp)
-2. [Những gì đã được làm sẵn](#2-những-gì-đã-được-làm-sẵn)
+2. [Các link cần dùng](#2-các-link-cần-dùng)
 3. [App Claude Desktop: hình nền nguyên màn hình](#3-app-claude-desktop-hình-nền-nguyên-màn-hình)
 4. [App Claude Desktop: mod `/pixel` trong tab Code](#4-app-claude-desktop-mod-pixel-trong-tab-code)
 5. [Trình duyệt trên laptop (claude.ai)](#5-trình-duyệt-trên-laptop-claudeai)
 6. [Điện thoại](#6-điện-thoại)
 7. [Xử lý sự cố](#7-xử-lý-sự-cố)
 8. [Gỡ bỏ](#8-gỡ-bỏ)
+9. [Ủng hộ tác giả](#9-ủng-hộ-tác-giả)
 
 ---
 
@@ -24,28 +25,34 @@ Ký hiệu phím: `Ctrl + Alt + I` nghĩa là giữ **Ctrl** và **Alt** rồi b
 | Bạn dùng Claude ở đâu | Cách làm | Kết quả | Phải làm lại không? |
 |---|---|---|---|
 | **App Claude Desktop** (tab Chat hoặc Code) | [Mục 3](#3-app-claude-desktop-hình-nền-nguyên-màn-hình): chạy script qua Developer Mode | Hình nền **nguyên màn hình** phía sau khung chat | Mỗi lần mở app phải chạy lại: bấm 3 phím |
-| **App Claude Desktop**, tab Code | [Mục 4](#4-app-claude-desktop-mod-pixel-trong-tab-code): mod `/pixel` (**đã cài sẵn**) | Dải cảnh động trên ô chat, khung cảnh bên cạnh, tin nhắn có viền màu | Không, tự chạy |
-| **claude.ai trên Chrome / Edge / Firefox** | [Mục 5](#5-trình-duyệt-trên-laptop-claudeai): Tampermonkey | Hình nền nguyên màn hình | Không, tự chạy |
+| **App Claude Desktop**, tab Code | [Mục 4](#4-app-claude-desktop-mod-pixel-trong-tab-code): mod `/pixel` | Dải cảnh động trên ô chat, khung cảnh bên cạnh, tin nhắn có viền màu | Không, tự chạy |
+| **claude.ai trên Chrome / Edge / Firefox** (có thể cài thành app riêng) | [Mục 5](#5-trình-duyệt-trên-laptop-claudeai): Tampermonkey | Hình nền nguyên màn hình | Không, tự chạy |
 | **iPhone (Safari) / Android (Firefox)** | [Mục 6](#6-điện-thoại) | Hình nền nguyên màn hình | Không, tự chạy |
 
 App Claude trên điện thoại (cài từ App Store / CH Play) thì không cài thêm được gì. Trên điện thoại phải mở claude.ai bằng trình duyệt.
 
+**Muốn tự động hoàn toàn mà vẫn có cửa sổ riêng như app?** Dùng claude.ai trên Edge/Chrome rồi cài thành ứng dụng ([mục 5](#5-trình-duyệt-trên-laptop-claudeai)). Cùng tài khoản, cùng lịch sử chat với app Desktop, và hình nền tự bật mỗi lần mở.
+
 ---
 
-## 2. Những gì đã được làm sẵn
+## 2. Các link cần dùng
 
-- Toàn bộ mã nguồn nằm trong repo GitHub [`Aqua2409z/About-Me-`](https://github.com/Aqua2409z/About-Me-), thư mục `chat-themes/`.
-- Mod `pixel-themes` đã có trên GitHub, và bạn **đã cài thành công** trong app Desktop (lệnh `/pixel koi` đã chạy).
-- File script cho hình nền nguyên màn hình nằm ở link dưới đây. Mục 3 sẽ dùng đến:
-  **https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js**
+| Thứ | Link |
+|---|---|
+| Script hình nền (dùng cho trình duyệt, điện thoại, DevTools) | **https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js** |
+| Trợ lý cài đặt cho app Desktop (6 bước, có nút sao chép script) | **https://aqua2409z.github.io/About-Me-/chat-themes/setup.html** |
+| Trang demo để xem thử | https://aqua2409z.github.io/About-Me-/chat-themes/ |
+| Tên marketplace của mod (app Desktop, tab Code) | `Aqua2409z/About-Me-` |
 
-Phần còn lại phải làm trên máy bạn: app Claude không cho chương trình bên ngoài điều khiển nó, nên các cú bấm trong app bạn phải tự làm.
+Các cú bấm bên trong app Claude Desktop thì bạn phải tự làm, vì app không cho chương trình bên ngoài điều khiển nó. Làm theo từng bước bên dưới là được.
 
 ---
 
 ## 3. App Claude Desktop: hình nền nguyên màn hình
 
 Cách này dùng **Developer Mode**, một tính năng gỡ lỗi chính thức có sẵn trong app. Ta mở công cụ dành cho lập trình viên (DevTools) rồi chạy script hình nền trong đó.
+
+> Có thể làm theo **[trợ lý cài đặt](https://aqua2409z.github.io/About-Me-/chat-themes/setup.html)** thay vì đọc mục này. Trang đó có cùng các bước, kèm nút sao chép script bằng 1 cú bấm.
 
 > Hình nền chạy tới khi bạn tắt app hoặc tải lại trang. Mở app lần sau thì làm [bước 3.5](#35-mỗi-lần-mở-lại-app) (bấm 3 phím). Theme bạn chọn được nhớ lại.
 
@@ -141,9 +148,18 @@ Nếu dùng cả hình nền nguyên màn hình lẫn mod ở mục 4, sẽ có 
 
 ## 4. App Claude Desktop: mod `/pixel` trong tab Code
 
-Mod này **đã cài sẵn**. Nó dùng hệ thống plugin chính thức nên tự chạy mỗi lần mở app, nhưng chỉ vẽ được ở 3 chỗ: dải trên ô chat, khung bên cạnh và viền quanh tin nhắn. Muốn nguyên màn hình thì dùng mục 3.
+Mod dùng hệ thống plugin chính thức nên cài 1 lần là tự chạy mỗi lần mở app. Nhưng nó chỉ vẽ được ở 3 chỗ: dải trên ô chat, khung bên cạnh và viền quanh tin nhắn. Muốn nguyên màn hình thì dùng mục 3.
 
-### 4.1. Các lệnh
+### 4.1. Cài mod
+
+1. Trong tab **Code**, bấm **+** cạnh ô chat → **Plugins** → **Add marketplace**.
+2. Ô **URL** chỉ ghi đúng: `Aqua2409z/About-Me-` (không dán link trang web), rồi bấm **Sync**.
+3. Chọn **pixel-themes** → **Add plugin** / **Install**.
+4. Mở một phiên Code mới và gõ `/pixel`.
+
+Nếu dùng Claude Code trong terminal: `claude plugin install pixel-themes --marketplace Aqua2409z/About-Me-`.
+
+### 4.2. Các lệnh
 
 Gõ vào ô chat của tab Code:
 
@@ -157,12 +173,9 @@ Gõ vào ô chat của tab Code:
 | `/pixel tint` | Bật/tắt viền màu quanh tin nhắn |
 | `/pixel off` | Tắt hết |
 
-### 4.2. Nếu cần cài lại (máy mới, hoặc lỡ gỡ)
+### 4.3. Cập nhật mod
 
-1. Trong tab **Code**, bấm **+** cạnh ô chat → **Plugins** → **Add marketplace**.
-2. Ô **URL** chỉ ghi đúng: `Aqua2409z/About-Me-` (không dán link trang web), rồi bấm **Sync**.
-3. Chọn **pixel-themes** → **Add plugin** / **Install**.
-4. Mở một phiên Code mới và gõ `/pixel`.
+Khi có bản mới: **+** → **Plugins**, chọn marketplace `Aqua2409z/About-Me-` → **Sync** (hoặc **Update**), rồi mở phiên Code mới.
 
 ---
 
@@ -172,10 +185,19 @@ Dùng cách này nếu bạn chat với Claude bằng trình duyệt. Cài 1 l�
 
 1. Cài tiện ích **Tampermonkey** từ cửa hàng tiện ích của trình duyệt (Chrome Web Store, Edge Add-ons, Firefox Add-ons).
 2. Chỉ với Chrome/Edge: vào `chrome://extensions` (Edge: `edge://extensions`), bấm **Chi tiết / Details** ở Tampermonkey và bật **Allow User Scripts**.
-3. Mở link script ở [mục 2](#2-những-gì-đã-được-làm-sẵn). Tampermonkey hiện trang cài đặt, bấm **Install**.
+3. Mở link script: https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js. Tampermonkey hiện trang cài đặt, bấm **Install**.
 4. Vào claude.ai. Hình nền hiện ra, gõ `/theme` để đổi.
 
-Muốn có cửa sổ riêng như một app: trong Chrome, khi đang ở claude.ai, bấm **⋮ → Truyền, lưu và chia sẻ → Cài đặt trang dưới dạng ứng dụng**.
+Script tự cập nhật khi có bản mới (Tampermonkey kiểm tra định kỳ).
+
+### Cài claude.ai thành app riêng (khuyên dùng trên Windows)
+
+Có cửa sổ riêng và icon riêng trên thanh taskbar, nhìn như app Desktop nhưng hình nền tự bật mỗi lần mở:
+
+- **Edge:** ở claude.ai, bấm **⋯ → Ứng dụng → Cài đặt trang web này dưới dạng ứng dụng**.
+- **Chrome:** ở claude.ai, bấm **⋮ → Truyền, lưu và chia sẻ → Cài đặt trang dưới dạng ứng dụng**.
+
+Sau đó chuột phải vào icon mới trên taskbar, chọn **Ghim vào thanh tác vụ**.
 
 ---
 
@@ -185,13 +207,13 @@ Muốn có cửa sổ riêng như một app: trong Chrome, khi đang ở claude.
 
 1. Cài app miễn phí **Userscripts** từ App Store. Mở app một lần và chọn thư mục lưu script.
 2. **Cài đặt → Safari → Phần mở rộng → Userscripts**: bật lên, cho phép trên `claude.ai`. Trên iOS 18: **Cài đặt → Ứng dụng → Safari → Phần mở rộng**.
-3. Mở link script bằng **Safari**, chạm biểu tượng **AA** trên thanh địa chỉ → **Userscripts** → **Install**.
+3. Mở link script bằng **Safari** (https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js), chạm biểu tượng **AA** trên thanh địa chỉ → **Userscripts** → **Install**.
 4. Vào claude.ai bằng Safari, chạm nút ô vuông nhiều màu ở cạnh phải.
 
 ### Android (Firefox)
 
 1. Cài **Firefox**, vào **Menu → Tiện ích (Add-ons)** và cài **Violentmonkey**.
-2. Mở link script bằng Firefox và bấm **Install**.
+2. Mở link script bằng Firefox (https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js) và bấm **Install**.
 3. Vào claude.ai bằng Firefox.
 
 ---
@@ -206,11 +228,11 @@ Muốn có cửa sổ riêng như một app: trong Chrome, khi đang ở claude.
 | Mở nhầm DevTools của Chrome / Edge | Nếu phía trên DevTools có các tab trang web (GitHub, YouTube…) là DevTools của trình duyệt. Đóng nó, bấm vào cửa sổ app Claude rồi mở lại. |
 | Dán vào Console không được | Gõ `allow pasting`, bấm Enter, rồi dán lại. |
 | Chạy script xong không thấy gì | Trong tab **Console**, nhìn ô chọn phía trên (thường ghi `top`). Bấm vào đó, chọn mục có chữ **claude**, rồi dán và chạy lại script. Nếu menu Developer có nhiều mục Dev Tools, thử mục còn lại. |
-| Console báo lỗi màu đỏ | Chụp màn hình lỗi gửi cho Claude để sửa. |
+| Console báo lỗi màu đỏ | Chụp màn hình lỗi rồi [mở Issue trên GitHub](https://github.com/Aqua2409z/About-Me-/issues). |
 | Chữ khó đọc | Mở bảng chọn → kéo **Làm dịu nền** sang phải, hoặc chọn theme hợp với giao diện sáng/tối. |
-| Có chỗ vẫn nền đặc, chưa trong suốt | Bình thường sau khi app cập nhật giao diện. Chụp màn hình gửi Claude. |
+| Có chỗ vẫn nền đặc, chưa trong suốt | Có thể xảy ra sau khi Claude cập nhật giao diện. Chụp màn hình rồi [mở Issue trên GitHub](https://github.com/Aqua2409z/About-Me-/issues). |
 | Mở app lại thì mất hình nền | Bình thường với cách ở mục 3. Làm [3.5](#35-mỗi-lần-mở-lại-app). |
-| Gõ `/pixel` không có lệnh | Mở một phiên Code **mới**. Nếu vẫn không có, cập nhật app Claude rồi [cài lại mod](#42-nếu-cần-cài-lại-máy-mới-hoặc-lỡ-gỡ). |
+| Gõ `/pixel` không có lệnh | Mở một phiên Code **mới**. Nếu vẫn không có, cập nhật app Claude rồi [cài lại mod](#41-cài-mod). |
 | Add marketplace báo *"isn't a marketplace"* | Ô URL phải ghi `Aqua2409z/About-Me-`, không phải link trang web GitHub. |
 
 ---
@@ -222,3 +244,17 @@ Muốn có cửa sổ riêng như một app: trong Chrome, khi đang ở claude.
 - **Trình duyệt / điện thoại:** mở Tampermonkey / Userscripts / Violentmonkey, xóa script *Pixel Chat Themes*.
 
 Script chỉ lưu lựa chọn theme của bạn trên máy và không gửi dữ liệu đi đâu.
+
+---
+
+## 9. Ủng hộ tác giả
+
+Pixel Chat Themes miễn phí. Nếu thấy hữu ích, bạn có thể mời tác giả ly cà phê ☕, **tuỳ tâm, không bắt buộc**:
+
+| Ngân hàng | Số tài khoản |
+|---|---|
+| MB Bank (Ngân hàng Quân đội) | `0923017526` |
+
+Nội dung chuyển khoản gợi ý: `Pixel Themes`. Bấm ⭐ **Star** cho [repo trên GitHub](https://github.com/Aqua2409z/About-Me-) hoặc chia sẻ cho bạn bè cũng là một cách ủng hộ. Cảm ơn bạn!
+
+Gặp lỗi hoặc muốn góp ý? Mở [Issue trên GitHub](https://github.com/Aqua2409z/About-Me-/issues), nhớ kèm ảnh chụp màn hình.

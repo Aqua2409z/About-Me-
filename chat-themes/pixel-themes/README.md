@@ -43,3 +43,7 @@ tests/pixel.test.tsx kiểm thử trên terminal, desktop, vscode, mobile
 ```
 
 Kiểm tra: `claude plugin validate .` và `claude plugin test .`
+
+## Giấy phép và ủng hộ
+
+[MIT](../../LICENSE). Pixel Themes miễn phí. Nếu thấy hữu ích, bạn có thể ủng hộ tác giả tuỳ tâm qua **MB Bank `0923017526`**, hoặc bấm ⭐ Star cho [repo](https://github.com/Aqua2409z/About-Me-).

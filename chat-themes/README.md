@@ -21,7 +21,7 @@ Hình nền **pixel / ASCII chuyển động** phía sau khung chat của [claud
 
 Mở trang demo: **https://aqua2409z.github.io/About-Me-/chat-themes/** (chạy được trên laptop và điện thoại).
 
-> Trang demo cần bật GitHub Pages một lần: repo **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: `main` / `(root)` → Save**. Chạy trên máy: mở `chat-themes/index.html` bằng trình duyệt.
+Muốn chạy trên máy: tải repo về rồi mở `chat-themes/index.html` bằng trình duyệt.
 
 ## Cài cho claude.ai
 
@@ -64,7 +64,7 @@ App Desktop không cài được tiện ích trình duyệt, nhưng có 2 cách 
 
 ### Hình nền nguyên màn hình: chạy script trong DevTools
 
-Hướng dẫn chi tiết từng cú bấm ở [HUONG-DAN.md, mục 3](HUONG-DAN.md#3-app-claude-desktop-hình-nền-nguyên-màn-hình). Tóm tắt:
+Làm theo **[trợ lý cài đặt 6 bước](https://aqua2409z.github.io/About-Me-/chat-themes/setup.html)** (có nút sao chép script bằng 1 cú bấm), hoặc đọc [HUONG-DAN.md, mục 3](HUONG-DAN.md#3-app-claude-desktop-hình-nền-nguyên-màn-hình). Tóm tắt:
 
 1. Bật Developer Mode (chỉ làm 1 lần): **Help → Troubleshooting → Enable Developer Mode**. App khởi động lại và có thêm menu **Developer**. Trên Windows, menu Help nằm trong nút ☰ ở góc trên bên trái.
 2. Bấm vào cửa sổ app Claude, mở DevTools: `Ctrl + Alt + I` (Windows; nếu không được thử `Ctrl + Shift + Alt + I`) / `Cmd + Option + I` (Mac). Nếu hiện 2 cửa sổ DevTools, dùng cửa sổ mà lệnh `location.href` trong Console trả về địa chỉ có `claude.ai`.
@@ -151,9 +151,13 @@ Các hàm vẽ có sẵn: `world.tile`, `world.sprite` (vẽ hình từ ASCII ar
 chat-themes/
 ├── claude-pixel-themes.user.js   # userscript, cũng là thư viện cho trang demo
 ├── index.html                    # trang demo kiểu ứng dụng chat
+├── setup.html                    # trợ lý cài đặt cho app Claude Desktop
+├── HUONG-DAN.md                  # hướng dẫn từng bước cho người mới
 ├── pixel-themes/                 # mod cho tab Code của app Claude Desktop
+├── preview.png
 └── README.md
 .claude-plugin/marketplace.json   # (gốc repo) để app Desktop cài mod từ repo này
+LICENSE                           # MIT
 ```
 
 ## Giới hạn
@@ -161,3 +165,17 @@ chat-themes/
 - App Claude trên điện thoại không cài thêm được gì. App Desktop dùng một trong 2 cách ở mục [Trong app Claude Desktop](#trong-app-claude-desktop).
 - Nếu claude.ai thay đổi lớn về giao diện, có thể có khung chưa được làm trong suốt. Khi đó, mở bảng `/theme` và chọn **Tắt** để trở lại bình thường.
 - Hiệu ứng kính mờ (`backdrop-filter`) tốn GPU hơn một chút trên máy yếu. Tăng **Độ đục khung** lên tối đa để tắt hiệu ứng mờ.
+
+## Ủng hộ tác giả
+
+Pixel Chat Themes miễn phí. Nếu thấy hữu ích, bạn có thể mời tác giả ly cà phê ☕, **tuỳ tâm, không bắt buộc**:
+
+| Ngân hàng | Số tài khoản |
+|---|---|
+| MB Bank (Ngân hàng Quân đội) | `0923017526` |
+
+Nội dung chuyển khoản gợi ý: `Pixel Themes`. Bấm ⭐ **Star** cho [repo trên GitHub](https://github.com/Aqua2409z/About-Me-) hoặc chia sẻ cho bạn bè cũng là một cách ủng hộ. Cảm ơn bạn!
+
+## Giấy phép
+
+[MIT](../LICENSE): ai cũng được dùng, sửa và chia sẻ lại miễn phí, chỉ cần giữ dòng ghi tên tác giả.

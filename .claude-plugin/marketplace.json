@@ -8,7 +8,8 @@
     {
       "name": "pixel-themes",
       "source": "./chat-themes/pixel-themes",
-      "description": "Pixel/ASCII wallpapers for Claude Code: animated scene above the prompt, a side pane, themed message colors. Run /pixel."
+      "description": "Pixel/ASCII wallpapers for Claude Code: animated scene above the prompt, a side pane, themed message colors. Run /pixel.",
+      "version": "1.0.0"
     }
   ]
 }
