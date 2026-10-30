@@ -25,7 +25,7 @@ Mở trang demo: **https://aqua2409z.github.io/About-Me-/chat-themes/** (chạy 
 
 File cần cài: [`claude-pixel-themes.user.js`](https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js)
 
-> Script chạy trên **claude.ai mở bằng trình duyệt**. Các app Claude chính thức (iPhone, Android, Desktop) không cho cài thêm script nên không dùng được.
+> Script chạy trên **claude.ai mở bằng trình duyệt**. App Claude trên điện thoại không cho cài thêm gì. **App Claude Desktop** có cách riêng, xem mục [Trong app Claude Desktop](#trong-app-claude-desktop).
 
 ### 💻 Laptop: Chrome, Edge, Brave, Firefox
 
@@ -48,6 +48,39 @@ Safari trên Mac: dùng app **Userscripts** (Mac App Store), cách cài giống 
 1. Cài **Firefox**, vào **Menu → Tiện ích (Add-ons)** và cài **Violentmonkey** hoặc **Tampermonkey**.
 2. Mở link file `.user.js` và bấm **Install**.
 3. Mở claude.ai trong Firefox.
+
+## Trong app Claude Desktop
+
+App Desktop không cài được tiện ích trình duyệt, nhưng có 2 cách chính chủ để thêm hình nền:
+
+| | Tab **Chat** (và cả cửa sổ) | Tab **Code** |
+|---|---|---|
+| Cách làm | Chạy userscript dưới dạng *snippet* trong DevTools (Developer Mode) | Cài mod [`pixel-themes`](pixel-themes/) |
+| Hình nền | Phủ kín phía sau khung chat, giống trên web | Dải cảnh trên ô chat, khung cảnh bên cạnh, tô màu tin nhắn |
+| Mở lại app | Phải chạy lại snippet (2 phím tắt) | Tự chạy, cài 1 lần |
+| Lệnh | `/theme` | `/pixel` |
+
+### Tab Chat: chạy snippet trong DevTools
+
+1. Bật Developer Mode (chỉ làm 1 lần): **Help → Troubleshooting → Enable Developer Mode**. App khởi động lại và có thêm menu **Developer**. Trên Windows, menu Help nằm trong nút ☰ ở góc trên bên trái.
+2. Mở DevTools: **Developer → Show Dev Tools**, hoặc `Ctrl + Shift + I` (Windows) / `Cmd + Option + I` (Mac).
+3. Trong DevTools, mở tab **Sources** → bấm `»` cạnh *Page* → **Snippets** → **+ New snippet**, đặt tên `pixel`.
+4. Mở file [`claude-pixel-themes.user.js`](https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js), chép **toàn bộ** nội dung, dán vào snippet rồi lưu (`Ctrl/Cmd + S`).
+5. Chạy: `Ctrl + Enter` (Mac: `Cmd + Enter`). Hình nền hiện ra, gõ `/theme` để đổi.
+
+**Những lần mở app sau:** mở DevTools, bấm `Ctrl/Cmd + P`, gõ `!pixel` rồi Enter. Snippet đã lưu sẵn, theme bạn chọn cũng được nhớ.
+
+**Không thấy gì sau khi chạy?** Mở tab **Console** của DevTools. Ở ô chọn ngữ cảnh phía trên (thường ghi `top`), chọn mục mang tên claude.ai. Sau đó dán toàn bộ nội dung file vào Console và nhấn Enter.
+
+> Developer Mode là tính năng gỡ lỗi chính thức của app. Chỉ dán vào DevTools mã bạn tin tưởng (ở đây là mã trong repo của bạn). Khi app cập nhật giao diện, script vẫn tự dò nền theo màu nên thường vẫn chạy; nếu có lỗi, chọn **Tắt** trong bảng `/theme` hoặc khởi động lại app.
+
+### Tab Code: cài mod `pixel-themes`
+
+1. Trong tab **Code**, bấm **+** cạnh ô chat → **Plugins** → **Add marketplace**, nhập `Aqua2409z/About-Me-`.
+2. Chọn **pixel-themes** → **Add plugin**.
+3. Gõ `/pixel` để mở bảng chọn theme. `/pixel koi` đổi thẳng; `/pixel side` mở khung cảnh bên cạnh; `/pixel tint` bật/tắt tô màu tin nhắn.
+
+Mod dùng hệ thống plugin chính thức của Claude Code. Hệ thống này chỉ cho vẽ ở dải trên ô chat, khung bên cạnh và quanh tin nhắn, nên mod không phủ kín phía sau khung chat như trên web. Chi tiết: [pixel-themes/README.md](pixel-themes/README.md).
 
 ## Cách dùng
 
@@ -114,11 +147,13 @@ Các hàm vẽ có sẵn: `world.tile`, `world.sprite` (vẽ hình từ ASCII ar
 chat-themes/
 ├── claude-pixel-themes.user.js   # userscript, cũng là thư viện cho trang demo
 ├── index.html                    # trang demo kiểu ứng dụng chat
+├── pixel-themes/                 # mod cho tab Code của app Claude Desktop
 └── README.md
+.claude-plugin/marketplace.json   # (gốc repo) để app Desktop cài mod từ repo này
 ```
 
 ## Giới hạn
 
-- Không chạy trong app Claude chính thức (iOS, Android, Desktop). Đây là giới hạn của các app đó, không phải của script.
+- App Claude trên điện thoại không cài thêm được gì. App Desktop dùng một trong 2 cách ở mục [Trong app Claude Desktop](#trong-app-claude-desktop).
 - Nếu claude.ai thay đổi lớn về giao diện, có thể có khung chưa được làm trong suốt. Khi đó, mở bảng `/theme` và chọn **Tắt** để trở lại bình thường.
 - Hiệu ứng kính mờ (`backdrop-filter`) tốn GPU hơn một chút trên máy yếu. Tăng **Độ đục khung** lên tối đa để tắt hiệu ứng mờ.
