@@ -1,0 +1,14 @@
+{
+  "name": "aqua2409z",
+  "owner": {
+    "name": "Aqua2409z"
+  },
+  "description": "Pixel/ASCII chat themes by Aqua2409z.",
+  "plugins": [
+    {
+      "name": "pixel-themes",
+      "source": "./chat-themes/pixel-themes",
+      "description": "Pixel/ASCII wallpapers for Claude Code: animated scene above the prompt, a side pane, themed message colors. Run /pixel."
+    }
+  ]
+}
