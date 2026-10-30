@@ -2,7 +2,7 @@
 
 Tài liệu này dành cho người chưa từng làm những việc như thế này. Mỗi bước chỉ có một việc. Cứ làm lần lượt từ trên xuống.
 
-Ký hiệu phím: `Ctrl + Shift + I` nghĩa là giữ **Ctrl** và **Shift** rồi bấm **I**. Trên Mac, `Ctrl` đổi thành `Cmd` và `Alt` đổi thành `Option`.
+Ký hiệu phím: `Ctrl + Alt + I` nghĩa là giữ **Ctrl** và **Alt** rồi bấm **I**. Trên Mac, `Ctrl` đổi thành `Cmd` và `Alt` đổi thành `Option`.
 
 ---
 
@@ -60,10 +60,21 @@ Cách này dùng **Developer Mode**, một tính năng gỡ lỗi chính thức 
 
 ### 3.2. Mở DevTools
 
-- Bấm `Ctrl + Shift + I` (Mac: `Cmd + Option + I`),
-- **hoặc** vào menu **Developer** → chọn mục có chữ **Dev Tools** (ví dụ *Show Dev Tools*). Nếu có nhiều mục, chọn mục nói về cửa sổ chính (*main window*).
+**Bấm chuột vào cửa sổ app Claude trước** (không phải Chrome hay Edge), rồi thử lần lượt từng tổ hợp phím cho tới khi DevTools hiện ra:
+
+| Windows | Mac |
+|---|---|
+| `Ctrl + Alt + I` (phím tắt trong tài liệu gỡ lỗi chính thức) | `Cmd + Option + I` |
+| `Ctrl + Shift + Alt + I` | `Cmd + Option + Shift + I` |
+| `Ctrl + Shift + I` | |
+
+Có thể mở bằng menu **☰ → Developer**, nếu trong đó có mục chữ **Dev Tools**.
 
 Một khung mới hiện ra (dính bên cạnh hoặc là cửa sổ riêng), phía trên có các tab **Elements, Console, Sources…** Đó là DevTools.
+
+Có thể có **2 cửa sổ DevTools** cùng hiện ra: một cho phần nội dung chính, một cho thanh tiêu đề của app. Để biết cửa sổ nào đúng, bấm tab **Console** trong từng cửa sổ, gõ `location.href` rồi nhấn Enter. Cửa sổ hiện địa chỉ có chữ `claude.ai` là cửa sổ đúng. Cửa sổ kia có thể đóng.
+
+Không phím nào mở được: xem [Xử lý sự cố](#7-xử-lý-sự-cố), dòng "Không phím nào mở được DevTools".
 
 ### 3.3. Chạy script lần đầu
 
@@ -84,7 +95,7 @@ Một khung mới hiện ra (dính bên cạnh hoặc là cửa sổ riêng), ph
 
 Làm bước này để không phải chép–dán mỗi lần mở app.
 
-1. Mở DevTools (`Ctrl + Shift + I`).
+1. Mở DevTools (tổ hợp phím đã dùng được ở [3.2](#32-mở-devtools)).
 2. Bấm tab **Sources**. Nếu không thấy, bấm `»` ở dãy tab trên cùng rồi chọn **Sources**.
 3. Ở cột bên trái của Sources, bấm `»` cạnh chữ **Page**, rồi chọn **Snippets**.
 4. Bấm **+ New snippet**. Đặt tên là `pixel` rồi bấm Enter.
@@ -93,7 +104,7 @@ Làm bước này để không phải chép–dán mỗi lần mở app.
 
 ### 3.5. Mỗi lần mở lại app
 
-1. `Ctrl + Shift + I` để mở DevTools.
+1. Bấm vào cửa sổ app Claude, mở DevTools bằng tổ hợp phím đã dùng được ở [3.2](#32-mở-devtools).
 2. `Ctrl + P`, gõ `!pixel` (có dấu chấm than ở đầu), bấm **Enter**.
 3. Đóng DevTools.
 
@@ -191,7 +202,8 @@ Muốn có cửa sổ riêng như một app: trong Chrome, khi đang ở claude.
 |---|---|
 | Không thấy mục **Help** trên Windows | Bấm nút **☰** ở góc trên bên trái cửa sổ app. |
 | Không thấy menu **Developer** | Developer Mode chưa bật, hoặc app chưa khởi động lại. Làm lại [3.1](#31-bật-developer-mode-chỉ-làm-1-lần), rồi thoát hẳn app (Windows: chuột phải biểu tượng Claude ở khay hệ thống góc dưới phải → Quit) và mở lại. |
-| `Ctrl + Shift + I` không mở gì | Dùng menu **Developer** → mục **Dev Tools**. |
+| Không phím nào mở được DevTools | 1) `Win + R` → dán `%APPDATA%\Claude` → Enter (Mac: Finder → `Cmd + Shift + G` → `~/Library/Application Support/Claude`). 2) Mở file `developer_settings.json` bằng Notepad (chưa có thì tạo file mới tên đó) và đảm bảo có `"allowDevTools": true`; file mới thì dán nguyên `{"allowDevTools": true}` rồi lưu. 3) Thoát hẳn Claude (khay hệ thống góc dưới phải → chuột phải biểu tượng Claude → Quit; Mac: `Cmd + Q`) rồi mở lại. 4) Thử lại các phím ở [3.2](#32-mở-devtools). |
+| Mở nhầm DevTools của Chrome / Edge | Nếu phía trên DevTools có các tab trang web (GitHub, YouTube…) là DevTools của trình duyệt. Đóng nó, bấm vào cửa sổ app Claude rồi mở lại. |
 | Dán vào Console không được | Gõ `allow pasting`, bấm Enter, rồi dán lại. |
 | Chạy script xong không thấy gì | Trong tab **Console**, nhìn ô chọn phía trên (thường ghi `top`). Bấm vào đó, chọn mục có chữ **claude**, rồi dán và chạy lại script. Nếu menu Developer có nhiều mục Dev Tools, thử mục còn lại. |
 | Console báo lỗi màu đỏ | Chụp màn hình lỗi gửi cho Claude để sửa. |
