@@ -4,6 +4,8 @@ Hình nền **pixel / ASCII chuyển động** phía sau khung chat của [claud
 
 ![Bảng chọn /theme với theme Cloud Drift](preview.png)
 
+> **Mới làm lần đầu?** Đọc [HUONG-DAN.md](HUONG-DAN.md): hướng dẫn từng bước cho app Claude Desktop, trình duyệt và điện thoại, kèm phần xử lý sự cố.
+
 | Theme | Gõ nhanh | Cảnh |
 |---|---|---|
 | Claude Code | `/theme code` | Nền terminal tối, tia sáng cam nhấp nháy, dòng code trôi |
@@ -53,14 +55,16 @@ Safari trên Mac: dùng app **Userscripts** (Mac App Store), cách cài giống 
 
 App Desktop không cài được tiện ích trình duyệt, nhưng có 2 cách chính chủ để thêm hình nền:
 
-| | Tab **Chat** (và cả cửa sổ) | Tab **Code** |
+| | Cả cửa sổ (tab Chat và Code) | Chỉ tab **Code** |
 |---|---|---|
 | Cách làm | Chạy userscript dưới dạng *snippet* trong DevTools (Developer Mode) | Cài mod [`pixel-themes`](pixel-themes/) |
 | Hình nền | Phủ kín phía sau khung chat, giống trên web | Dải cảnh trên ô chat, khung cảnh bên cạnh, tô màu tin nhắn |
 | Mở lại app | Phải chạy lại snippet (2 phím tắt) | Tự chạy, cài 1 lần |
 | Lệnh | `/theme` | `/pixel` |
 
-### Tab Chat: chạy snippet trong DevTools
+### Hình nền nguyên màn hình: chạy script trong DevTools
+
+Hướng dẫn chi tiết từng cú bấm ở [HUONG-DAN.md, mục 3](HUONG-DAN.md#3-app-claude-desktop-hình-nền-nguyên-màn-hình). Tóm tắt:
 
 1. Bật Developer Mode (chỉ làm 1 lần): **Help → Troubleshooting → Enable Developer Mode**. App khởi động lại và có thêm menu **Developer**. Trên Windows, menu Help nằm trong nút ☰ ở góc trên bên trái.
 2. Mở DevTools: **Developer → Show Dev Tools**, hoặc `Ctrl + Shift + I` (Windows) / `Cmd + Option + I` (Mac).
