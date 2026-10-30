@@ -67,7 +67,7 @@ App Desktop không cài được tiện ích trình duyệt, nhưng có 2 cách 
 Hướng dẫn chi tiết từng cú bấm ở [HUONG-DAN.md, mục 3](HUONG-DAN.md#3-app-claude-desktop-hình-nền-nguyên-màn-hình). Tóm tắt:
 
 1. Bật Developer Mode (chỉ làm 1 lần): **Help → Troubleshooting → Enable Developer Mode**. App khởi động lại và có thêm menu **Developer**. Trên Windows, menu Help nằm trong nút ☰ ở góc trên bên trái.
-2. Mở DevTools: **Developer → Show Dev Tools**, hoặc `Ctrl + Shift + I` (Windows) / `Cmd + Option + I` (Mac).
+2. Bấm vào cửa sổ app Claude, mở DevTools: `Ctrl + Alt + I` (Windows; nếu không được thử `Ctrl + Shift + Alt + I`) / `Cmd + Option + I` (Mac). Nếu hiện 2 cửa sổ DevTools, dùng cửa sổ mà lệnh `location.href` trong Console trả về địa chỉ có `claude.ai`.
 3. Trong DevTools, mở tab **Sources** → bấm `»` cạnh *Page* → **Snippets** → **+ New snippet**, đặt tên `pixel`.
 4. Mở file [`claude-pixel-themes.user.js`](https://raw.githubusercontent.com/Aqua2409z/About-Me-/main/chat-themes/claude-pixel-themes.user.js), chép **toàn bộ** nội dung, dán vào snippet rồi lưu (`Ctrl/Cmd + S`).
 5. Chạy: `Ctrl + Enter` (Mac: `Cmd + Enter`). Hình nền hiện ra, gõ `/theme` để đổi.
