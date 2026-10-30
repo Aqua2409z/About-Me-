@@ -91,7 +91,10 @@ Không phím nào mở được: xem [Xử lý sự cố](#7-xử-lý-sự-cố)
 3. Quay lại DevTools trong app Claude, bấm tab **Console**.
 4. Bấm chuột vào dòng trống dưới cùng (có dấu `>`), rồi bấm `Ctrl + V` để dán.
 5. Nếu DevTools hiện cảnh báo kiểu *"Don't paste code into the DevTools Console…"* và không cho dán:
-   gõ đúng chữ `allow pasting`, bấm **Enter**, rồi `Ctrl + V` lại. Việc này chỉ cần làm 1 lần.
+   - **Tắt bộ gõ tiếng Việt** trước (Unikey, EVKey, bộ gõ Windows/Mac: chuyển sang chế độ **E** / tiếng Anh). Để bộ gõ Telex thì `allow` sẽ thành `allơ` và DevTools không nhận.
+   - **Gõ tay** từng chữ `allow pasting` vào dòng `>` của Console (hoặc ô nhập trong hộp cảnh báo), bấm **Enter**. Chữ này không dán được vì lúc đó DevTools đang chặn dán.
+   - Rồi `Ctrl + V` dán script lại. Việc này chỉ cần làm 1 lần.
+   - Cảnh báo ghi chữ khác (ví dụ tiếng Việt) thì gõ đúng chữ trong cảnh báo. Gõ xong hiện dòng đỏ `SyntaxError` thì không sao, nghĩa là DevTools vốn không chặn: cứ dán script.
 6. Bấm **Enter**.
 7. Hình nền chuyển động hiện ra phía sau khung chat, và có thêm nút **ô vuông nhiều màu** ở cạnh phải màn hình.
 8. Bạn có thể đóng DevTools (nút X của khung DevTools). Hình nền vẫn ở lại.
@@ -226,7 +229,7 @@ Sau đó chuột phải vào icon mới trên taskbar, chọn **Ghim vào thanh 
 | Không thấy menu **Developer** | Developer Mode chưa bật, hoặc app chưa khởi động lại. Làm lại [3.1](#31-bật-developer-mode-chỉ-làm-1-lần), rồi thoát hẳn app (Windows: chuột phải biểu tượng Claude ở khay hệ thống góc dưới phải → Quit) và mở lại. |
 | Không phím nào mở được DevTools | 1) `Win + R` → dán `%APPDATA%\Claude` → Enter (Mac: Finder → `Cmd + Shift + G` → `~/Library/Application Support/Claude`). 2) Mở file `developer_settings.json` bằng Notepad (chưa có thì tạo file mới tên đó) và đảm bảo có `"allowDevTools": true`; file mới thì dán nguyên `{"allowDevTools": true}` rồi lưu. 3) Thoát hẳn Claude (khay hệ thống góc dưới phải → chuột phải biểu tượng Claude → Quit; Mac: `Cmd + Q`) rồi mở lại. 4) Thử lại các phím ở [3.2](#32-mở-devtools). |
 | Mở nhầm DevTools của Chrome / Edge | Nếu phía trên DevTools có các tab trang web (GitHub, YouTube…) là DevTools của trình duyệt. Đóng nó, bấm vào cửa sổ app Claude rồi mở lại. |
-| Dán vào Console không được | Gõ `allow pasting`, bấm Enter, rồi dán lại. |
+| Dán vào Console không được, gõ `allow pasting` cũng không ăn | 1) **Tắt bộ gõ tiếng Việt** (chuyển sang chế độ E), vì Telex biến `allow` thành `allơ`. 2) **Gõ tay**, đừng dán chữ này. 3) Gõ vào dòng `>` của tab **Console** trong DevTools của app Claude, không phải ô chat. 4) Cảnh báo ghi chữ khác thì gõ đúng chữ đó. 5) Hiện `SyntaxError` là bình thường, cứ dán script. |
 | Chạy script xong không thấy gì | Trong tab **Console**, nhìn ô chọn phía trên (thường ghi `top`). Bấm vào đó, chọn mục có chữ **claude**, rồi dán và chạy lại script. Nếu menu Developer có nhiều mục Dev Tools, thử mục còn lại. |
 | Console báo lỗi màu đỏ | Chụp màn hình lỗi rồi [mở Issue trên GitHub](https://github.com/aqua2409z/pixel-chat-themes/issues). |
 | Chữ khó đọc | Mở bảng chọn → kéo **Làm dịu nền** sang phải, hoặc chọn theme hợp với giao diện sáng/tối. |

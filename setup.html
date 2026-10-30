@@ -132,6 +132,9 @@
   }
 
   .step .warn { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .fixpaste { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); }
+  .fixpaste p, .fixpaste ol { margin: 0; font-size: 14px; }
+  .fixpaste ol { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
   .step .warn::before { content: "Lưu ý: "; color: var(--accent); }
 
   section.later { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 14px; border: 1px dashed var(--key-edge); }
@@ -225,9 +228,15 @@
         <h2>Dán vào Console</h2>
         <p>Trong DevTools, bấm tab <b>Console</b>. Bấm vào dòng trống có dấu <code>&gt;</code> ở dưới cùng, rồi dán bằng <span class="win"><kbd>Ctrl</kbd>+<kbd>V</kbd></span><span class="mac" hidden><kbd>Cmd</kbd>+<kbd>V</kbd></span>.</p>
         <p class="note">Dán đúng thì ô Console dài ra rất nhiều dòng. Nếu chỉ thấy 1–2 dòng là bạn chưa chép đúng: quay lại bước 3 và bấm nút sao chép.</p>
-        <p class="note">Chỉ khi DevTools hiện cảnh báo <i>“Don't paste code…”</i> và không cho dán thì mới gõ chữ dưới đây, nhấn <kbd>Enter</kbd>, rồi dán lại. Nếu gõ xong hiện dòng đỏ <code>SyntaxError</code> thì không sao, cứ dán script bình thường.</p>
-        <button class="copy small" type="button" id="copy-allow">Sao chép “allow pasting”</button>
-        <div class="status" id="allow-status" role="status" aria-live="polite"></div>
+        <div class="fixpaste">
+          <p><b>DevTools không cho dán?</b> Nếu có cảnh báo <i>“Don't paste code…”</i> bảo gõ chữ <code>allow pasting</code>:</p>
+          <ol>
+            <li><b>Tắt bộ gõ tiếng Việt</b> (Unikey, EVKey, bộ gõ của Windows/Mac): chuyển sang chế độ <b>E</b> / tiếng Anh. Để bộ gõ Telex thì chữ <code>allow</code> sẽ thành <code>allơ</code> và DevTools không nhận.</li>
+            <li><b>Gõ tay</b> từng chữ <code>allow pasting</code> vào dòng <code>&gt;</code> của Console (hoặc vào ô nhập trong hộp cảnh báo), rồi nhấn <kbd>Enter</kbd>. Chữ này <b>không dán được</b>, vì lúc đó DevTools đang chặn mọi thao tác dán.</li>
+            <li>Dán script lại.</li>
+          </ol>
+          <p class="note">Cảnh báo ghi chữ khác (ví dụ bằng tiếng Việt) thì gõ đúng chữ trong cảnh báo. Gõ xong mà hiện dòng đỏ <code>SyntaxError</code> thì không sao: nghĩa là DevTools vốn không chặn, cứ dán script bình thường.</p>
+        </div>
         <label class="check"><input type="checkbox" id="done-4"> Đã xong</label>
       </div>
     </li>
@@ -375,11 +384,6 @@
     document.getElementById('copy-devsettings').addEventListener('click', function () {
       copy('{"allowDevTools": true}', 'devsettings-status', 'Đã chép. Dán vào file rồi lưu.', function () {
         document.getElementById('devsettings-status').textContent = 'Gõ tay: {"allowDevTools": true}';
-      });
-    });
-    document.getElementById('copy-allow').addEventListener('click', function () {
-      copy('allow pasting', 'allow-status', 'Đã chép. Dán vào Console, nhấn Enter, rồi dán script lại.', function () {
-        document.getElementById('allow-status').textContent = 'Gõ tay: allow pasting';
       });
     });
 
