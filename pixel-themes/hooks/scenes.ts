@@ -26,6 +26,7 @@ export const THEMES: Theme[] = [
   { id: 'boats', name: 'Paper Boats', desc: 'thuyền giấy trên sóng', dark: false, alias: ['thuyen', 'boat'], accent: '#4fb6b0', bubble: '#4fb6b022' },
   { id: 'fireflies', name: 'Fireflies', desc: 'rừng đêm, đom đóm', dark: true, alias: ['dom dom', 'domdom', 'firefly', 'rung'], accent: '#b6d94a', bubble: '#b6d94a22' },
   { id: 'moon', name: 'Moonlit', desc: 'trăng, sao, sao băng', dark: true, alias: ['trang', 'dem', 'night'], accent: '#8f9cff', bubble: '#8f9cff22' },
+  { id: 'vn', name: 'Việt Nam', desc: 'cờ đỏ sao vàng tung bay', dark: false, alias: ['co', 'co do', 'co viet nam', 'co do sao vang', 'viet nam', 'vietnam', 'quoc ky', 'to quoc', 'flag'], accent: '#da251d', bubble: '#da251d22' },
 ]
 
 export const byId = (id: string): Theme | undefined => THEMES.find(t => t.id === id)
@@ -38,6 +39,8 @@ export function findTheme(q: string): string | undefined {
   const s = strip(q)
   if (!s) return undefined
   if (/^(off|tat|none|0)$/.test(s)) return 'off'
+  const exact = THEMES.find(t => t.id === s || strip(t.name) === s || t.alias.includes(s))
+  if (exact) return exact.id
   return THEMES.find(t => t.id.startsWith(s) || strip(t.name).includes(s) || t.alias.some(a => a.startsWith(s)))?.id
 }
 
@@ -616,6 +619,163 @@ function moon(sc: Scene) {
   )
 }
 
+// Vietnam's flag: 2:3, red field, a yellow five-pointed star whose
+// centre-to-tip radius is 1/5 of the flag's length, one point up.
+const FLAG_RED = '#da251d'
+const FLAG_RED_GLYPH = '#b51f18'
+const FLAG_YELLOW = '#ffea00'
+const FLAG_YELLOW_GLYPH = '#cfb800'
+
+function inStar(x: number, y: number, cx: number, cy: number, R: number) {
+  const r = R * 0.381966
+  let inside = false
+  for (let k = 0, j = 9; k < 10; j = k++) {
+    const ak = -Math.PI / 2 + (k * Math.PI) / 5
+    const aj = -Math.PI / 2 + (j * Math.PI) / 5
+    const rk = k % 2 ? r : R
+    const rj = j % 2 ? r : R
+    const xk = cx + Math.cos(ak) * rk
+    const yk = cy + Math.sin(ak) * rk
+    const xj = cx + Math.cos(aj) * rj
+    const yj = cy + Math.sin(aj) * rj
+    if (yk > y !== yj > y && x < ((xj - xk) * (y - yk)) / (yj - yk) + xk) inside = !inside
+  }
+  return inside
+}
+
+function karstRow(cols: number, peaks: { x: number; w: number; h: number; lean: number }[]) {
+  const hs = new Array<number>(cols).fill(0)
+  for (const p of peaks) {
+    for (let x = Math.floor(p.x - p.w * 1.3); x <= Math.ceil(p.x + p.w * 1.3); x++) {
+      if (x < 0 || x >= cols) continue
+      const dx = x + 0.5 - p.x
+      const d = Math.abs(dx) / (p.w * (dx < 0 ? 1 + p.lean : 1 - p.lean))
+      if (d >= 1) continue
+      hs[x] = Math.max(hs[x] ?? 0, Math.round(p.h * Math.pow(1 - Math.pow(d, 2.6), 0.55)))
+    }
+  }
+  return hs
+}
+
+function vn(sc: Scene) {
+  const c = sc.cell
+  const horizon = Math.round(sc.rows * 0.8)
+  const top = Math.max(1, Math.round(sc.rows * 0.12))
+  const narrow = sc.cols < 60
+  const L = Math.round(Math.max(8, Math.min(48, Math.min(sc.cols * (narrow ? 0.55 : 0.34), (horizon - top - 2) * 1.5))))
+  const H = Math.round((L * 2) / 3)
+  const px = Math.round(Math.max(2, Math.min(narrow ? sc.cols - L - 3 : sc.cols * 0.62, sc.cols - L - 2)))
+
+  // Sky and sea.
+  const sky = sc.id('g')
+  sc.def(`<linearGradient id="${sky}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f9fe0"/><stop offset=".55" stop-color="#9fd2f2"/><stop offset="1" stop-color="#ffe0b0"/></linearGradient>`)
+  sc.add(`<rect width="${sc.W}" height="${horizon * c}" fill="url(#${sky})"/>`)
+  const sea = sc.id('g')
+  sc.def(`<linearGradient id="${sea}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb7cc"/><stop offset="1" stop-color="#2c7896"/></linearGradient>`)
+  sc.add(`<rect y="${horizon * c}" width="${sc.W}" height="${sc.H - horizon * c}" fill="url(#${sea})"/>`)
+  sc.add(sc.glow(sc.W * 0.82, horizon * c, Math.max(sc.W, sc.H) * 0.45, '#ffd27a', 0.55))
+
+  // Rising sun, then hazy far towers and darker near towers with green crowns.
+  const land: Tile[] = []
+  const sx = Math.round(sc.cols * 0.82)
+  const sr = Math.max(2, Math.min(5, Math.round(sc.rows * 0.07)))
+  for (let dy = -sr; dy <= 0; dy++) for (let dx = -sr; dx <= sr; dx++) if (Math.hypot(dx, dy) <= sr + 0.3) land.push([sx + dx, horizon - 1 + dy, '#fff0b8', '#f5d27a', sc.glyph(dx, dy)])
+  const cluster = (n: number, wMin: number, wMax: number, hMax: number) => {
+    const out: { x: number; w: number; h: number; lean: number }[] = []
+    for (let k = 0; k < n; k++) {
+      const x = sc.rnd(0, sc.cols)
+      const h = sc.rnd(hMax * 0.55, hMax)
+      const w = sc.rnd(wMin, wMax)
+      out.push({ x, w, h, lean: sc.rnd(-0.25, 0.25) })
+      if (sc.rand() < 0.7) out.push({ x: x + w * sc.rnd(0.8, 1.3) * (sc.rand() < 0.5 ? -1 : 1), w: w * 0.7, h: h * sc.rnd(0.45, 0.7), lean: sc.rnd(-0.25, 0.25) })
+    }
+    return out
+  }
+  const far = karstRow(sc.cols, cluster(Math.round(Math.max(2, Math.min(8, sc.cols / 14))), 3, 6, Math.max(4, sc.rows * 0.16)))
+  const near = karstRow(sc.cols, cluster(Math.round(Math.max(1, Math.min(5, sc.cols / 22))), 3.5, 7, Math.max(5, sc.rows * 0.24)))
+  sc.add(sc.tiles(land))
+  const farTiles: Tile[] = []
+  const nearTiles: Tile[] = []
+  const reflect: Tile[] = []
+  for (let x = 0; x < sc.cols; x++) {
+    for (let k = 0; k < (far[x] ?? 0); k++) farTiles.push([x, horizon - 1 - k, '#a9c4cf', '#97b5c2', sc.glyph(x, k)])
+    const hgt = near[x] ?? 0
+    for (let k = 0; k < hgt; k++) {
+      const crown = k >= hgt - 2 && hgt > 2
+      nearTiles.push([x, horizon - 1 - k, crown ? '#6f9e7c' : '#5b8b92', crown ? '#557f62' : '#46737a', sc.glyph(x, k)])
+    }
+    for (let k = 0; k < Math.min(hgt, sc.rows - horizon) * 0.5; k++) reflect.push([x, horizon + k, '#3f7f8f', null, ''])
+  }
+  sc.add(`<g opacity=".8">${sc.tiles(farTiles)}</g>`)
+  sc.add(sc.tiles(nearTiles))
+  sc.add(`<g opacity=".3">${sc.tiles(reflect)}</g>`)
+
+  clouds(sc, { c: ['#ffffff', '#a9c1d6'], e: ['#eef6fd', '#c3d5e5'] }, Math.max(2, Math.min(5, Math.round(sc.cols / 30))), horizon * c * 0.45, 0.5, 0.9)
+
+  // Birds glide right to left, flapping.
+  for (let k = Math.round(Math.max(2, Math.min(8, sc.cols / 14))); k > 0; k--) {
+    const y = sc.rnd(2, horizon * 0.5) * c
+    const bird = sc.glyphs
+      ? `<text fill="#33475b" x="0" y="0">v<animate attributeName="opacity" values="1;0" calcMode="discrete" dur=".5s" repeatCount="indefinite"/></text><text fill="#33475b" x="0" y="0" opacity="0">-<animate attributeName="opacity" values="0;1" calcMode="discrete" dur=".5s" repeatCount="indefinite"/></text>`
+      : `<rect x="0" y="-1" width="${r1(c * 0.8)}" height="1" fill="#33475b"/>`
+    sc.drift(bird, sc.W + 20, -20, y, (sc.W + 40) / (c * sc.rnd(0.8, 1.8)), sc.rand(), 0.85)
+  }
+
+  // Water ripples and the sun's glittering path.
+  const ripples: Tile[] = []
+  const glints: Tile[] = []
+  for (let y = horizon; y < sc.rows; y++) {
+    const d = y - horizon
+    for (let x = 0; x < sc.cols; x++) if ((x * 13 + y * 7) % 17 === 0) ripples.push([x, y, null, '#e6f6fb', '~'])
+    const spread = Math.round(1 + d * 0.8)
+    for (let x = sx - spread; x <= sx + spread; x++) if (sc.rand() < 0.3) glints.push([x, y, '#fff0b8', '#f0d27a', '~'])
+  }
+  sc.add(`<g opacity=".55"><animateTransform attributeName="transform" type="translate" values="0 0;${c * 2} 0;0 0" dur="8s" repeatCount="indefinite"/>${sc.tiles(ripples)}</g>`)
+  sc.add(`<g opacity=".6"><animate attributeName="opacity" values=".4;.7;.45;.65;.4" dur="2.4s" repeatCount="indefinite"/>${sc.tiles(glints)}</g>`)
+
+  // Pole with a gold finial and a stone base.
+  const pole: Tile[] = []
+  for (let y = top - 1; y <= horizon + 1; y++) pole.push([px, y, '#ece6d8', '#bdb5a3', '|'])
+  pole.push([px, top - 2, '#ffd34d', '#c99a1c', 'o'])
+  for (let dx = -1; dx <= 1; dx++) pole.push([px + dx, horizon + 2, '#8d99a6', '#6d7884', '='])
+  sc.add(sc.tiles(pole))
+
+  // The flag: every column bobs on the same sine wave, offset by its distance
+  // from the pole; amplitude grows toward the free end. A dark/light overlay
+  // per column follows the slope of the cloth.
+  const A = Math.max(1, H * 0.14)
+  const k = (Math.PI * 2.2) / L
+  const N = 16
+  const dur = 1.85
+  for (let i = 0; i < L; i++) {
+    const f = Math.pow((i + 1) / L, 0.8)
+    const col: Tile[] = []
+    for (let j = 0; j < H; j++) {
+      let n = 0
+      for (let a = 0; a < 6; a++) for (let b = 0; b < 6; b++) if (inStar(i + (a + 0.5) / 6, j + (b + 0.5) / 6, L / 2, H / 2, L / 5)) n++
+      const star = n / 36 >= 0.22
+      col.push([px + 1 + i, top + j, star ? FLAG_YELLOW : FLAG_RED, star ? FLAG_YELLOW_GLYPH : FLAG_RED_GLYPH, star ? '*' : sc.glyph(i, j)])
+    }
+    const ys: number[] = []
+    const dark: number[] = []
+    const light: number[] = []
+    for (let s2 = 0; s2 <= N; s2++) {
+      const ph = i * k - (Math.PI * 2 * s2) / N
+      ys.push(Math.round((Math.sin(ph) + 0.18 * Math.sin(ph * 2 + 1)) * A * f) * c)
+      const slope = Math.cos(ph) * (0.6 + f) * 0.5
+      dark.push(r1(Math.max(0, -slope) * 0.32))
+      light.push(r1(Math.max(0, slope) * 0.22))
+    }
+    const x = (px + 1 + i) * c
+    sc.add(
+      `<g><animateTransform attributeName="transform" type="translate" values="${ys.map(v => `0 ${v}`).join(';')}" dur="${dur}s" repeatCount="indefinite"/>` +
+        sc.tiles(col) +
+        `<rect x="${x}" y="${top * c}" width="${c}" height="${H * c}" fill="#000" opacity="0"><animate attributeName="opacity" values="${dark.join(';')}" dur="${dur}s" repeatCount="indefinite"/></rect>` +
+        `<rect x="${x}" y="${top * c}" width="${c}" height="${H * c}" fill="#fff" opacity="0"><animate attributeName="opacity" values="${light.join(';')}" dur="${dur}s" repeatCount="indefinite"/></rect></g>`,
+    )
+  }
+}
+
 /* ----------------------------------------------------------------- entry */
 
 const BUILDERS: Record<string, [glyphs: string, draw: (sc: Scene) => void]> = {
@@ -627,6 +787,7 @@ const BUILDERS: Record<string, [glyphs: string, draw: (sc: Scene) => void]> = {
   boats: ['~-.', boats],
   fireflies: ['|/\\^.', fireflies],
   moon: ['+*.:', moon],
+  vn: [':.;', vn],
 }
 
 const SIZES: Record<Layout, [w: number, h: number, cell: number]> = {

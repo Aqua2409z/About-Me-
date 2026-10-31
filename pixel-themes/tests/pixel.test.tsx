@@ -84,6 +84,12 @@ test('a theme kept from an earlier session comes back, and Vietnamese names work
 
   const unknown = await $.command.run(pixel('pizza'))
   expect(unknown.text).toContain('Không có theme')
+
+  // The flag theme answers to its Vietnamese names; "co" must not fall through to "code".
+  for (const [typed, id] of [['vietnam', 'vn'], ['Việt Nam', 'vn'], ['co', 'vn'], ['code', 'code']] as const) {
+    await $.command.run(pixel(typed))
+    expect((store.get('prefs') as { theme: string }).theme).toBe(id)
+  }
 })
 
 test('the picker applies a theme on press, on every surface', async ($, on) => {

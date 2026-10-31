@@ -169,7 +169,8 @@ Gõ vào ô chat của tab Code:
 | Lệnh | Kết quả |
 |---|---|
 | `/pixel` | Mở bảng chọn có ảnh thu nhỏ từng theme |
-| `/pixel koi` | Đổi sang Koi Pond (tương tự: `code`, `cloud`, `lagoon`, `jelly`, `boats`, `fireflies`, `moon`) |
+| `/pixel koi` | Đổi sang Koi Pond (tương tự: `code`, `cloud`, `lagoon`, `jelly`, `boats`, `fireflies`, `moon`, `vn`) |
+| `/pixel viet nam` hoặc `/pixel co` | Đổi sang theme Việt Nam: cờ đỏ sao vàng tung bay |
 | `/pixel trang`, `/pixel sua`, `/pixel may`… | Đổi theme bằng tên tiếng Việt không dấu |
 | `/pixel side` | Mở khung cảnh cao bên cạnh khung chat |
 | `/pixel band` | Bật/tắt dải cảnh trên ô chat |

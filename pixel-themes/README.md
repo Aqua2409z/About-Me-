@@ -1,6 +1,6 @@
 # pixel-themes (mod cho Claude Code)
 
-Hình nền pixel/ASCII chuyển động cho **tab Code của app Claude Desktop** (cũng chạy trong VS Code và app điện thoại khi xem phiên Claude Code). Có 8 theme giống bản userscript cho claude.ai: Claude Code, Cloud Drift, Honu Lagoon, Koi Pond, Jellyfish, Paper Boats, Fireflies, Moonlit.
+Hình nền pixel/ASCII chuyển động cho **tab Code của app Claude Desktop** (cũng chạy trong VS Code và app điện thoại khi xem phiên Claude Code). Có 9 theme giống bản userscript cho claude.ai: Claude Code, Cloud Drift, Honu Lagoon, Koi Pond, Jellyfish, Paper Boats, Fireflies, Moonlit, Việt Nam.
 
 Mod gồm ba phần:
 
@@ -37,7 +37,7 @@ Mod chính thức chỉ vẽ được ở những vị trí app cho phép: dải
 
 ```
 hooks/register.tsx   lệnh /pixel, bảng chọn, dải cảnh, khung bên cạnh, tô màu tin nhắn
-hooks/scenes.ts      8 cảnh pixel dạng SVG tự chuyển động (SMIL)
+hooks/scenes.ts      9 cảnh pixel dạng SVG tự chuyển động (SMIL)
 types/index.d.ts     kiểu của trạng thái đã lưu
 tests/pixel.test.tsx kiểm thử trên terminal, desktop, vscode, mobile
 ```

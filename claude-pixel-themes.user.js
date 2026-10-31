@@ -2,7 +2,7 @@
 // @name         Pixel Chat Themes
 // @name:vi      Pixel Chat Themes – hình nền pixel cho claude.ai
 // @namespace    https://github.com/aqua2409z/pixel-chat-themes
-// @version      1.1.0
+// @version      1.2.0
 // @description  Animated pixel/ASCII wallpapers behind the claude.ai chat. Type /theme to pick one.
 // @description:vi Hình nền pixel/ASCII chuyển động phía sau khung chat claude.ai. Gõ /theme để chọn.
 // @author       aqua2409z
@@ -936,6 +936,219 @@
     },
   });
 
+  // Vietnam's flag: 2:3, red field, a yellow five-pointed star in the middle
+  // whose centre-to-tip radius is 1/5 of the flag's length, one point up.
+  const FLAG_RED = [
+    ['#9e1712', '#7f120e'],
+    ['#b31b15', '#921611'],
+    ['#c72019', '#a51a14'],
+    ['#da251d', '#b51f18'],
+    ['#e8382c', '#c52c22'],
+    ['#f2503f', '#d23e31'],
+    ['#fa6a55', '#dc5545'],
+  ];
+  const FLAG_YELLOW = [
+    ['#c7b000', '#9c8900'],
+    ['#dac400', '#ac9800'],
+    ['#ecd800', '#bda800'],
+    ['#ffea00', '#cfb800'],
+    ['#fff23d', '#dcc81a'],
+    ['#fff76b', '#e4d244'],
+    ['#fffa99', '#ebdc6e'],
+  ];
+
+  function inStar(x, y, cx, cy, R) {
+    const r = R * 0.381966;
+    let inside = false;
+    for (let k = 0, j = 9; k < 10; j = k++) {
+      const ak = -Math.PI / 2 + (k * Math.PI) / 5;
+      const aj = -Math.PI / 2 + (j * Math.PI) / 5;
+      const rk = k % 2 ? r : R;
+      const rj = j % 2 ? r : R;
+      const xk = cx + Math.cos(ak) * rk;
+      const yk = cy + Math.sin(ak) * rk;
+      const xj = cx + Math.cos(aj) * rj;
+      const yj = cy + Math.sin(aj) * rj;
+      if (yk > y !== yj > y && x < ((xj - xk) * (y - yk)) / (yj - yk) + xk) inside = !inside;
+    }
+    return inside;
+  }
+
+  function flagGeo(w) {
+    const horizon = Math.round(w.rows * 0.8);
+    const top = Math.max(2, Math.round(w.rows * 0.12));
+    // Phones get a bigger share of the width so the star stays readable.
+    const narrow = w.cols < 60;
+    const L = Math.round(clamp(Math.min(w.cols * (narrow ? 0.55 : 0.34), ((horizon - top - 3) * 3) / 2), 9, 48));
+    const H = Math.round((L * 2) / 3);
+    const px = Math.round(clamp(narrow ? w.cols - L - 3 : w.cols * 0.62, 2, w.cols - L - 2));
+    return { horizon, top, L, H, px };
+  }
+
+  // Limestone karst towers (Ha Long style): steep sides, rounded tops.
+  function karstHeights(cols, peaks) {
+    const hs = new Array(cols).fill(0);
+    for (const p of peaks) {
+      for (let x = Math.floor(p.x - p.w * 1.3); x <= Math.ceil(p.x + p.w * 1.3); x++) {
+        if (x < 0 || x >= cols) continue;
+        // Lean: the left and right flanks fall at different rates.
+        const dx = x + 0.5 - p.x;
+        const d = Math.abs(dx) / (p.w * (dx < 0 ? 1 + p.lean : 1 - p.lean));
+        if (d >= 1) continue;
+        // Steep flanks, a broad rounded crown.
+        hs[x] = Math.max(hs[x], Math.round(p.h * Math.pow(1 - Math.pow(d, 2.6), 0.55)));
+      }
+    }
+    return hs;
+  }
+
+  THEMES.push({
+    id: 'vn',
+    name: 'Việt Nam',
+    dark: false,
+    veilScale: 0.5,
+    alias: ['co', 'co do', 'co viet nam', 'co do sao vang', 'viet nam', 'vietnam', 'quoc ky', 'to quoc', 'flag'],
+    glyphs: ':.;',
+    bg(c, w, h, W) {
+      const g = flagGeo(W);
+      const hy = g.horizon * W.cell;
+      const sky = c.createLinearGradient(0, 0, 0, hy);
+      sky.addColorStop(0, '#4f9fe0');
+      sky.addColorStop(0.55, '#9fd2f2');
+      sky.addColorStop(1, '#ffe0b0');
+      c.fillStyle = sky;
+      c.fillRect(0, 0, w, hy);
+      const sea = c.createLinearGradient(0, hy, 0, h);
+      sea.addColorStop(0, '#6fb7cc');
+      sea.addColorStop(1, '#2c7896');
+      c.fillStyle = sea;
+      c.fillRect(0, hy, w, h - hy);
+      rglow(c, w * 0.82, hy, Math.max(w, h) * 0.45, '#ffd27a', 0.55);
+    },
+    init(w) {
+      const s = w.s;
+      const g = flagGeo(w);
+      s.mask = [];
+      for (let j = 0; j < g.H; j++) {
+        const row = [];
+        for (let i = 0; i < g.L; i++) {
+          // Area coverage (6x6 samples per cell) keeps the thin star points from breaking up.
+          let n = 0;
+          for (let a = 0; a < 6; a++) for (let b = 0; b < 6; b++) if (inStar(i + (a + 0.5) / 6, j + (b + 0.5) / 6, g.L / 2, g.H / 2, g.L / 5)) n++;
+          row.push(n / 36 >= 0.22);
+        }
+        s.mask.push(row);
+      }
+      const cluster = (n, wMin, wMax, hMax) => {
+        const out = [];
+        for (let c = 0; c < n; c++) {
+          const x = rnd(0, w.cols);
+          const h = rnd(hMax * 0.55, hMax);
+          const wd = rnd(wMin, wMax);
+          out.push({ x, w: wd, h, lean: rnd(-0.25, 0.25) });
+          if (Math.random() < 0.7) out.push({ x: x + wd * rnd(0.8, 1.3) * (Math.random() < 0.5 ? -1 : 1), w: wd * 0.7, h: h * rnd(0.45, 0.7), lean: rnd(-0.25, 0.25) });
+        }
+        return out;
+      };
+      s.far = cluster(Math.round(clamp(w.cols / 14, 2, 8)), 3, 6, Math.max(4, w.rows * 0.16));
+      s.near = cluster(Math.round(clamp(w.cols / 22, 1, 5)), 3.5, 7, Math.max(5, w.rows * 0.24));
+      s.clouds = Array.from({ length: Math.round(clamp(w.cols / 30, 2, 5)) }, () => {
+        const c = cloud(w, true, CLOUD_DAY);
+        c.y = rnd(-1, g.horizon * 0.45);
+        c.v *= 0.5;
+        return c;
+      });
+      s.birds = Array.from({ length: Math.round(clamp(w.cols / 14, 3, 9)) }, () => ({ x: rnd(0, w.cols), y: rnd(2, g.horizon * 0.5), v: rnd(0.8, 1.8), ph: rnd(0, 6) }));
+      s.dust = Array.from({ length: Math.round(clamp(w.cols / 4, 6, 30)) }, () => ({ x: rnd(w.cols * 0.55, w.cols), y: rnd(0, g.horizon), ph: rnd(0, 6), v: rnd(0.1, 0.4) }));
+    },
+    under(w) {
+      const s = w.s;
+      const g = flagGeo(w);
+      // Rising sun, half behind the mountains.
+      const sx = Math.round(w.cols * 0.82);
+      const sr = clamp(Math.round(w.rows * 0.07), 2, 5);
+      for (let dy = -sr; dy <= 0; dy++) {
+        for (let dx = -sr; dx <= sr; dx++) {
+          if (Math.hypot(dx, dy) <= sr + 0.3) w.tile(sx + dx, g.horizon - 1 + dy, '#fff0b8', '#f5d27a', w.ch(dx, dy, 31));
+        }
+      }
+      const far = karstHeights(w.cols, s.far);
+      const near = karstHeights(w.cols, s.near);
+      // Far towers fade into the morning haze; near ones are darker with green crowns.
+      for (let x = 0; x < w.cols; x++) {
+        for (let k = 0; k < far[x]; k++) w.tile(x, g.horizon - 1 - k, '#a9c4cf', '#97b5c2', w.ch(x, k, 32), 0.8);
+      }
+      for (let x = 0; x < w.cols; x++) {
+        const hgt = near[x];
+        for (let k = 0; k < hgt; k++) {
+          const crown = k >= hgt - 2 && hgt > 2;
+          w.tile(x, g.horizon - 1 - k, crown ? '#6f9e7c' : '#5b8b92', crown ? '#557f62' : '#46737a', w.ch(x, k, 33));
+        }
+      }
+      // Reflections of the near towers on the water.
+      for (let x = 0; x < w.cols; x++) {
+        for (let k = 0; k < Math.min(near[x], w.rows - g.horizon) * 0.5; k++) w.tile(x, g.horizon + k, '#3f7f8f', null, '', 0.35 - k * 0.06);
+      }
+    },
+    frame(w, dt) {
+      const s = w.s;
+      const g = flagGeo(w);
+      const t = w.t;
+
+      for (const c of s.clouds) {
+        c.x += c.v * dt;
+        if (c.x > w.cols + 1) c.x = -c.sp.w - rnd(0, 10);
+        w.sprite(c.sp, c.x, c.y, { a: c.a * 0.9, seed: c.seed });
+      }
+      for (const d of s.dust) w.dot(d.x + Math.sin(t * 0.6 + d.ph), d.y - ((t * d.v) % g.horizon), '#fff4c8', 0.25 + 0.25 * Math.sin(t * 2 + d.ph), 0.22);
+      for (const b of s.birds) {
+        b.x -= b.v * dt;
+        if (b.x < -2) {
+          b.x = w.cols + rnd(1, 10);
+          b.y = rnd(2, g.horizon * 0.5);
+        }
+        w.glyph(b.x, b.y + Math.sin(t * 1.3 + b.ph) * 0.6, Math.floor(t * 4 + b.ph) % 2 ? 'v' : '-', '#33475b', 0.85);
+      }
+
+      // Water: drifting ripples and the sun's glittering path.
+      const tick = Math.floor(t * 4);
+      const sx = Math.round(w.cols * 0.82);
+      for (let y = g.horizon; y < w.rows; y++) {
+        const d = y - g.horizon;
+        const dir = y % 2 ? 1 : -1;
+        for (let x = 0; x < w.cols; x++) {
+          if (hash(Math.floor(x + t * 0.8 * dir), y, 41) < 0.08) w.glyph(x, y, '~', '#e6f6fb', 0.55);
+        }
+        const spread = 1 + d * 0.8;
+        for (let x = Math.floor(sx - spread); x <= sx + spread; x++) {
+          if (hash(x, y, tick) < 0.3) w.tile(x, y, '#fff0b8', '#f0d27a', '~', 0.65 - d * 0.03);
+        }
+      }
+
+      // Flagpole with a gold finial and a stone base.
+      for (let y = g.top - 1; y <= g.horizon + 1; y++) w.tile(g.px, y, '#ece6d8', '#bdb5a3', '|');
+      w.tile(g.px, g.top - 2, '#ffd34d', '#c99a1c', 'o');
+      for (let dx = -1; dx <= 1; dx++) w.tile(g.px + dx, g.horizon + 2, '#8d99a6', '#6d7884', '=');
+
+      // The flag: each column rides a sine wave that grows from the pole to the
+      // free end, snapped to whole cells; the slope picks one of seven shades.
+      const A = Math.max(1, g.H * 0.14);
+      const k = (Math.PI * 2.2) / g.L;
+      for (let i = 0; i < g.L; i++) {
+        const f = Math.pow((i + 1) / g.L, 0.8);
+        const ph = i * k - t * 3.4;
+        const dy = Math.round((Math.sin(ph) + 0.18 * Math.sin(ph * 2.1 + 1)) * A * f);
+        const shade = clamp(Math.round(Math.cos(ph) * (0.6 + f) * 2), -3, 3) + 3;
+        const x = g.px + 1 + i;
+        for (let j = 0; j < g.H; j++) {
+          const star = s.mask[j] && s.mask[j][i];
+          const p = (star ? FLAG_YELLOW : FLAG_RED)[shade];
+          w.tile(x, g.top + j + dy, p[0], p[1], star ? '*' : w.ch(i, j, 34));
+        }
+      }
+    },
+  });
+
   const ITEMS = THEMES.map((t) => t.id).concat('off');
   const byId = (id) => THEMES.find((t) => t.id === id);
 
@@ -1000,7 +1213,7 @@ html[data-pxt-on] canvas[data-pxt-ui="bg"] { display: block !important; }
 .ttl { opacity: .7; }
 .hint { margin-left: auto; opacity: .55; font-size: 11px; white-space: nowrap; }
 .note { padding: 0 4px 6px; font-size: 11px; opacity: .7; }
-.list { position: relative; display: flex; gap: 8px; overflow-x: auto; padding: 3px 3px 8px; scrollbar-width: thin; }
+.list { position: relative; display: flex; flex-wrap: wrap; gap: 10px 8px; max-height: min(52vh, 420px); overflow-y: auto; padding: 3px 3px 8px; scrollbar-width: thin; }
 .it { flex: 0 0 auto; width: 84px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .th { display: block; width: 84px; height: 54px; border-radius: 8px; overflow: hidden; outline: 2px solid transparent; outline-offset: 1px; background: rgba(127,127,127,.2); }
 .th canvas { display: block; width: 100%; height: 100%; }
@@ -1300,7 +1513,7 @@ html[data-pxt-on] canvas[data-pxt-ui="bg"] { display: block !important; }
   function paint(dt) {
     if (!world || !world.th) return;
     world.veilColor = siteDark ? '#141413' : '#fbfaf6';
-    world.veil = clamp(cfg.veil + (world.th.dark === siteDark ? 0 : 0.42), 0, 0.9);
+    world.veil = clamp(cfg.veil * (world.th.veilScale || 1) + (world.th.dark === siteDark ? 0 : 0.42), 0, 0.9);
     world.draw(dt);
   }
 
@@ -1519,12 +1732,13 @@ html[data-pxt-on] canvas[data-pxt-ui="bg"] { display: block !important; }
       b.classList.toggle('cur', ITEMS[i] === cfg.theme);
       b.setAttribute('aria-selected', String(i === sel));
     });
+    // The grid wraps; on a short screen it scrolls vertically to keep the selection in view.
     const b = items[sel];
     if (b && list) {
-      const L = b.offsetLeft;
-      const R = L + b.offsetWidth;
-      if (L < list.scrollLeft) list.scrollLeft = L - 4;
-      else if (R > list.scrollLeft + list.clientWidth) list.scrollLeft = R - list.clientWidth + 4;
+      const T = b.offsetTop;
+      const B = T + b.offsetHeight;
+      if (T < list.scrollTop) list.scrollTop = T - 4;
+      else if (B > list.scrollTop + list.clientHeight) list.scrollTop = B - list.clientHeight + 4;
     }
   }
 
@@ -1578,6 +1792,8 @@ html[data-pxt-on] canvas[data-pxt-ui="bg"] { display: block !important; }
     q = strip(q);
     if (!q) return -1;
     if (/^(off|tat|none|0)$/.test(q)) return ITEMS.indexOf('off');
+    const exact = THEMES.findIndex((t) => t.id === q || strip(t.name) === q || t.alias.includes(q));
+    if (exact >= 0) return exact;
     return THEMES.findIndex((t) => t.id.startsWith(q) || strip(t.name).includes(q) || t.alias.some((a) => a.startsWith(q)));
   }
 
